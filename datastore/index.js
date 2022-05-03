@@ -18,7 +18,7 @@ exports.create = (text, callback) => {
         if (err) {
           console.log('cannot write');
         } else {
-          callback(null, text);
+          callback(null, {id, text});
         }
       });
     }
@@ -26,10 +26,28 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  // console.log(fs.readdir(exports.dataDir, ));
+
+  fs.readdir(exports.dataDir, (err, files) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // create storage array
+      let todoStorage = [];
+      _.each(files, file => {
+        let fileName = file.split('.')[0];
+        // push file into array
+        todoStorage.push({id: fileName, text: fileName});
+      });
+      // call callback on array?
+      callback(null, todoStorage);
+    }
   });
-  callback(null, data);
+
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
