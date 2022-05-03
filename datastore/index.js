@@ -99,6 +99,20 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
+  fs.readFile(path.join(exports.dataDir, `${id}.txt`), 'utf8', (err, file) => {
+    console.log(file);
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      fs.unlink(path.join(exports.dataDir, `${id}.txt`), (err) => {
+        if (err) {
+          console.log(new Error(`No item with id: ${id}`));
+        } else {
+          callback();
+        }
+      });
+    }
+  });
   // var item = items[id];
   // delete items[id];
   // if (!item) {
