@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
-// test
-const counterTest = require('../test/counterTest.txt');
+
 
 var counter = 0;
 
@@ -44,18 +43,30 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (callback) => {
   // call readCounter, pass in a callback
   readCounter((err, num) => {
-    // return numberfied string
-    counter = num;
-  })
-    // callback should take in two values, error? and a stringified number
-      // stringified number comes from saved file's text -- not quite surehow to get it
-      // set counter in this file to numberfied
-
-  writeCounter(counter + 1, (null, str) => {
-    fs.writeFile(counterFile, str);
+    if (err) {
+      console.log('error');
+      // return err;
+    } else {
+      // return numberfied string
+      // counter = num;
+      // return counter;
+      writeCounter(num + 1, (err, str) => {
+        if (err) {
+          // return err;
+          console.log('error');
+        } else {
+          // return str;
+          callback(null, str);
+        }
+      });
+    }
   });
+  // callback should take in two values, error? and a stringified number
+  // stringified number comes from saved file's text -- not quite surehow to get it
+  // set counter in this file to numberfied
 
-  return zeroPaddedNumber(counter);
+
+  // return zeroPaddedNumber(counter); // uncommented out
 };
 
 //fs.existsSync()
