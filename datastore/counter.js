@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
 
+
 var counter = 0;
 
 // Private helper functions ////////////////////////////////////////////////////
@@ -38,13 +39,41 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+// pass in callback from index???
+exports.getNextUniqueId = (callback) => {
+  // call readCounter, pass in a callback
+  readCounter((err, num) => {
+    if (err) {
+      console.log('error');
+      // return err;
+    } else {
+      // return numberfied string
+      // counter = num;
+      // return counter;
+      writeCounter(num + 1, (err, str) => {
+        if (err) {
+          // return err;
+          console.log('error');
+        } else {
+          // return str;
+          callback(null, str);
+        }
+      });
+    }
+  });
+  // callback should take in two values, error? and a stringified number
+  // stringified number comes from saved file's text -- not quite surehow to get it
+  // set counter in this file to numberfied
+
+
+  // return zeroPaddedNumber(counter); // uncommented out
 };
 
+//fs.existsSync()
 
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
 exports.counterFile = path.join(__dirname, 'counter.txt');
+// not quite understanding path.join? what is it doing?
+// /Users/parkerjn90/HackReactor/Sprints/rfe2204-cruddy-todo/datastore + /counter.txt
